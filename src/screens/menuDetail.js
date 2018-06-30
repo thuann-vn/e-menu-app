@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { ScrollView, TextInput, Text, View, Picker, Button, Alert } from 'react-native';
+import { ScrollView, TextInput, Text, View, Picker, Button, Alert, AsyncStorage } from 'react-native';
 import { Tile, List, ListItem } from 'react-native-elements';
+import { Cart }  from '../services/cart';
 
 class MenuDetail extends Component {
   constructor(props)
@@ -13,6 +14,7 @@ class MenuDetail extends Component {
 
   addToCart = ()=>{
     //TODO: add to cart
+    Cart.addItem(this.props.navigation.state.params);
     Alert.alert('Add to cart: ' + this.props.navigation.state.params.name + '..' + this.state.quantity);
   }
 

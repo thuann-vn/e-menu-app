@@ -1,3 +1,8 @@
+/**
+ * E-MENU API
+ * SIMPLE API TO GET MENU LIST AND CREATE ORDER
+ */
+
 const API_URL = 'https://e-menu-dev.herokuapp.com/api/';
 export const api = {
     getMenuList: ()=>{
