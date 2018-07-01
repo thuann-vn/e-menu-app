@@ -47,8 +47,8 @@ class MenuDetail extends Component {
         <Tile
           imageSrc={{ uri: item.image}}
           featured
-          title={`${item.name}`}
-          caption={item.price.toString()}
+          title={item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+          caption={item.name}
         />
         <View style={{flex: 1, flexDirection: 'column', padding: 20}}>
           <Text> Quantity: </Text>

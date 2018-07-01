@@ -60,7 +60,7 @@ class Menu extends Component {
         <Image style={{ height: 148,  width : 150}} source={{ uri: itemData.item.image }} resizeMode='cover' />
         <View style={styles.MenuItemDetailStyle}>
           <Text style={styles.MenuItemNameStyle}> {itemData.item.name} </Text>
-          <Text style={styles.MenuItemPriceStyle}> Price: {itemData.item.price} </Text>
+          <Text style={styles.MenuItemPriceStyle}> Price: {itemData.item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} </Text>
           <Button style={styles.MenuItemButtonStyle} title="View detail"  onPress={this.menuItemClick.bind(this, itemData.item)} />
         </View>
       </TouchableOpacity>

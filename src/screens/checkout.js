@@ -40,7 +40,7 @@ class Checkout extends Component {
 
     //Call api
     var cartService = new CartService();
-    var cart = await cartService.getCart;
+    var cart = await cartService.getCart()
     
     ApiService.checkOut(this.state.name, this.state.phone, cart).then((responseJson)=>{
       this.setState({
@@ -50,7 +50,10 @@ class Checkout extends Component {
       Alert.alert(
         'Check out successfully',
         'Your order was sent to us, we will contact you as soon as we can. Thanks for your support!'
-      )
+      );
+      cartService.setCart([]);
+
+      this.props.navigation.navigate('Menu');
     });
   }
 
