@@ -14,8 +14,7 @@ import {
   Button
 } from 'react-native';
 import { List, ListItem } from 'react-native-elements';
-import { users } from '../config/data';
-import { api }  from '../services/api';
+import { ApiService }  from '../services/api';
 
 class Menu extends Component {
   constructor(props)
@@ -31,13 +30,11 @@ class Menu extends Component {
   };
 
   componentDidMount() {
-    api.getMenuList().then((responseJson)=>{
+    ApiService.getMenuList().then((responseJson)=>{
       this.setState({
         isLoading: false,
         dataSource: responseJson
-      }, function() {
-        // In this block you can do something with new state.
-      });
+      }, function() {});
     });
   }
 
@@ -100,13 +97,11 @@ const styles = StyleSheet.create({
   },
   MenuItemStyle: {
     padding: 10,
-    fontSize: 18,
     flex:1,
     flexDirection: 'row'
   },
   MenuItemDetailStyle: {
     padding: 10,
-    fontSize: 18,
     flex:1,
     flexDirection: 'column',
     justifyContent: 'center',

@@ -4,10 +4,21 @@
  * DOCS: https://facebook.github.io/react-native/docs/asyncstorage.html
  */
 
-import { AsyncStorage } from "react-native"
+import {
+    AsyncStorage
+} from "react-native"
+
+//SECRECT KEY FOR SAVE CART
 const STORAGE_KEY = 'EMENUCART';
-export const Cart = {
-    getCart: ()=>{
+
+export const CartService = () => {
+    var self = this;
+
+    /**
+     * Get cart list 
+     * @returns array
+     */
+    this.getCart = async () => {
         try {
             const value = await AsyncStorage.getItem(STORAGE_KEY);
             if (value !== null) {
@@ -18,40 +29,78 @@ export const Cart = {
         } catch (error) {
             return [];
         }
-    },
-    setCart: (cart) =>{
+    };
+
+    /**
+     * Update cart, return true if sucess, false if failed
+     * @param {array} cart
+     * @returns boolean
+     */
+    this.setCart = async (cart) => {
         try {
             await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
-            if (value !== null) {
-                // We have data!!
-                return value;
-            }
-            return [];
+            return true;
         } catch (error) {
-            return [];
+            return false;
         }
-    },
-    addItem: (item) =>{
-        let cart = this.getCart();
-        cart.push(item);
-        this.setCart(cart);
-    },
-    removeItem: (item) => {
-        let cart = this.getCart();
-        for(var i= cart.length-1; i>=0; i--){
-            if(item.id == cart[i].id){
-                cart.splice(i, 0, 1);
+    };
+
+
+    /**
+     * Add item to cart
+     * @param {object} item 
+     */
+    this.addItem = async (item) => {
+        let cart = await self.getCart();
+
+        //Check if item existed
+        var isExisted = false;
+        for (var i = 0; i < cart.length; i++) {
+            if (cart[i].id == item.id) {
+                cart[i].quantity += item.quantity;
+                isExisted = true;
             }
         }
-        this.setCart(cart);
-    },
-    updateItemQuantity: (item, quantity) => {
-        let cart = this.getCart();
-        for(var i= cart.length-1; i>=0; i--){
-            if(item.id == cart[i].id){
-                cart.quantity = quantity;
-            }
+
+        //Push new if not existed
+        if(!isExisted){
+            cart.push(item);
         }
-        this.setCart(cart);
+
+        //Set cart
+        await self.setCart(cart);
     }
+
+    /**
+     * Remove item from cart
+     * @param {object} item 
+     */
+    this.removeItem = async (item) => {
+        let cart = await self.getCart();
+        for (var i = cart.length - 1; i >= 0; i--) {
+            if (item.id == cart[i].id) {
+                cart.splice(i, 1);
+            }
+        }
+        await self.setCart(cart);
+        return cart;
+    }
+
+    /**
+     * Update item quantity
+     * @param {object} item 
+     * @param {integer} quantity 
+     */
+    this.updateItemQuantity = async (item, quantity) => {
+        let cart = await self.getCart();
+        for (var i = cart.length - 1; i >= 0; i--) {
+            if (item.id == cart[i].id) {
+                cart[i].quantity = quantity;
+            }
+        }
+        await self.setCart(cart);
+        return cart;
+    }
+
+    return this;
 };

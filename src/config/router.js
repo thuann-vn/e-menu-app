@@ -3,9 +3,10 @@ import { TabNavigator, StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
 import Menu from '../screens/menu';
-import Settings from '../screens/Settings';
 import MenuDetail from '../screens/menuDetail';
 import Cart from '../screens/cart';
+import Checkout from '../screens/checkout';
+import CartService from '../services/cart'
 
 export const MenuStack = StackNavigator({
   Menu: {
@@ -22,27 +23,33 @@ export const MenuStack = StackNavigator({
   },
 });
 
-export const Tabs = TabNavigator({
-    Menu: {
-    screen: MenuStack,
-    navigationOptions: {
-      tabBarLabel: 'Menu',
-      tabBarIcon: ({ tintColor }) => <Icon name="list" size={35} color={tintColor} />,
-    },
-  },
+
+export const CartStack = StackNavigator({
   Cart: {
     screen: Cart,
     navigationOptions: {
-      tabBarLabel: 'Cart'
+      title: 'Cart',
     },
+  },
+  Checkout: {
+    screen: Checkout,
+    navigationOptions: ({ navigation }) => ({
+      title: `Checkout`,
+    }),
   },
 });
 
-export const SettingsStack = StackNavigator({
-  Settings: {
-    screen: Settings,
+export const Tabs = TabNavigator({
+  Menu: {
+    screen: MenuStack,
     navigationOptions: {
-      title: 'Settings',
+      tabBarLabel: 'Menu',
+    },
+  },
+  Cart: {
+    screen: CartStack,
+    navigationOptions: {
+      tabBarLabel: 'Cart',
     },
   },
 });
@@ -50,9 +57,6 @@ export const SettingsStack = StackNavigator({
 export const Root = StackNavigator({
   Tabs: {
     screen: Tabs,
-  },
-  Settings: {
-    screen: SettingsStack,
   },
 }, {
   mode: 'modal',

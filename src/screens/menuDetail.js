@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ScrollView, TextInput, Text, View, Picker, Button, Alert, AsyncStorage } from 'react-native';
 import { Tile, List, ListItem } from 'react-native-elements';
-import { Cart }  from '../services/cart';
+import { CartService }  from '../services/cart';
 
 class MenuDetail extends Component {
   constructor(props)
@@ -12,21 +12,43 @@ class MenuDetail extends Component {
     }
   }
 
-  addToCart = ()=>{
-    //TODO: add to cart
-    Cart.addItem(this.props.navigation.state.params);
-    Alert.alert('Add to cart: ' + this.props.navigation.state.params.name + '..' + this.state.quantity);
+  getParams = ()=>{
+    const { name, image, price, _id } = this.props.navigation.state.params;
+    return {
+      id: _id,
+      name: name,
+      image: image,
+      price: price
+    }
+  }
+
+  addToCart = async ()=>{
+    var cart = new CartService();
+    var item = this.getParams();
+    item.quantity = this.state.quantity;
+    await cart.addItem(item);
+    
+    Alert.alert(
+      'Added to cart',
+      'Your food and drink was added to cart, would you like to check out now?',
+      [
+        {text: 'I want buy more', onPress: () => this.props.navigation.navigate('Menu')},
+        {text: 'Cancel', style: 'cancel'},
+        {text: 'OK', onPress: () => this.props.navigation.navigate('Cart')},
+      ],
+      { cancelable: false }
+    )
   }
 
   render() {
-    const { name, image, price, id } = this.props.navigation.state.params;
+    const item = this.getParams();
     return (
       <ScrollView>
         <Tile
-          imageSrc={{ uri: image}}
+          imageSrc={{ uri: item.image}}
           featured
-          title={`${name}`}
-          caption={price}
+          title={`${item.name}`}
+          caption={item.price.toString()}
         />
         <View style={{flex: 1, flexDirection: 'column', padding: 20}}>
           <Text> Quantity: </Text>
